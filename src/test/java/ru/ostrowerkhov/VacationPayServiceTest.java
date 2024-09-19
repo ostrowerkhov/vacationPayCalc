@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.ostrowerkhov.service.VacationPayService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class VacationPayServiceTest {
@@ -16,38 +17,45 @@ public class VacationPayServiceTest {
     @Test
     public void calculateVacationPayTest() {
 
-        Double avgSalary = 100000.0;
-        Integer vacationDays = 21;
-
-        Double compensation = vacationPayService.calculateVacationPay(avgSalary, vacationDays);
-
-        assertEquals(71672.35494880546, compensation);
+        assertEquals(71672.35494880546,
+                vacationPayService.calculateVacationPay(100000.0, 21));
     }
 
     @Test
     public void calculateVacationPayGivenNonWorkingDaysTest() {
 
-        Double avgSalary = 100000.0;
+        double avgSalary = 100000.0;
 
-        String startOfVacationWithoutNonWorkingDays = "11.05.2025";
-        String endOfVacationWithoutNonWorkingDays = "18.05.2025";
-
-        Double vacationPayWithoutNonWorkingDays = vacationPayService.calculateVacationPayGivenNonWorkingDays(
+        assertEquals(27303.754266211603, vacationPayService.calculateVacationPayGivenNonWorkingDays(
                 avgSalary,
-                startOfVacationWithoutNonWorkingDays,
-                endOfVacationWithoutNonWorkingDays);
+                "11.05.2025",
+                "18.05.2025"));
 
-        String startOfVacationWithNonWorkingDays = "01.01.2025";
-        String endOfVacationWithNonWorkingDays = "14.01.2025";
-
-        Double vacationPayWithNonWorkingDays = vacationPayService.calculateVacationPayGivenNonWorkingDays(
+        assertEquals(20477.815699658702, vacationPayService.calculateVacationPayGivenNonWorkingDays(
                 avgSalary,
-                startOfVacationWithNonWorkingDays,
-                endOfVacationWithNonWorkingDays
-        );
+                "01.01.2025",
+                "14.01.2025"
+        ));
+    }
 
-        assertEquals(27303.754266211603, vacationPayWithoutNonWorkingDays);
-        assertEquals(20477.815699658702, vacationPayWithNonWorkingDays);
+    @Test
+    public void enterIncorrectSalaryTest() {
+
+        assertThrows(IllegalArgumentException.class,
+                () -> vacationPayService.calculateVacationPay(0.0, 21));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> vacationPayService.calculateVacationPay(-100000.0, 14));
+    }
+
+    @Test
+    public void enterIncorrectVacationDaysTest() {
+
+        assertThrows(IllegalArgumentException.class,
+                () -> vacationPayService.calculateVacationPay(100000.0, 0));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> vacationPayService.calculateVacationPay(100000.0, 30));
     }
 
 }
