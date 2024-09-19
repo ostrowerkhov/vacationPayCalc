@@ -17,14 +17,14 @@ public class VacationPayService {
 
     public Double calculateVacationPay(Double avgSalary, Integer vacationDays) {
 
+        validate(avgSalary, vacationDays);
         double avgMonthDays = 29.3;
         return (avgSalary / avgMonthDays) * vacationDays;
-
     }
 
     public Double calculateVacationPayGivenNonWorkingDays(Double avgSalary,
-                                      String startOfVacation,
-                                      String endOfVacation) {
+                                                          String startOfVacation,
+                                                          String endOfVacation) {
 
         return calculateVacationPay(avgSalary,
                 getVacationWithoutNonWorkingDays(startOfVacation, endOfVacation));
@@ -49,4 +49,17 @@ public class VacationPayService {
         }
         return vacationDates.size();
     }
+
+    private void validate(Double avgSalary, Integer vacationDays) {
+
+        if (avgSalary <= 0) {
+            throw new IllegalArgumentException("Average salary must be greater than 0");
+        }
+        if (vacationDays <= 0) {
+            throw new IllegalArgumentException("Vacation days must be greater than 0");
+        } else if (vacationDays > 28) {
+            throw new IllegalArgumentException("Vacation days must be less than 28");
+        }
+    }
+
 }

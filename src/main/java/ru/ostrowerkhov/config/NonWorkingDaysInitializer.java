@@ -18,14 +18,15 @@ public class NonWorkingDaysInitializer {
     @PostConstruct
     public static Set<LocalDate> initNonWorkingDays() throws DateTimeParseException {
 
-        Set<LocalDate> holidays = new HashSet<>();
+        Set<LocalDate> nonWorkingDays = new HashSet<>();
 
         BufferedReader br = new BufferedReader(new FileReader("src/main/resources/nonWorkingDays.txt"));
         String line;
         while ((line = br.readLine()) != null) {
             LocalDate date = LocalDate.parse(line.trim(), f);
-            holidays.add(date);
+            nonWorkingDays.add(date);
         }
-        return holidays;
+        return nonWorkingDays;
     }
+
 }
