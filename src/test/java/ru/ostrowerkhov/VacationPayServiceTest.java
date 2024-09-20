@@ -16,14 +16,12 @@ public class VacationPayServiceTest {
 
     @Test
     public void calculateVacationPayTest() {
-
         assertEquals(71672.35494880546,
                 vacationPayService.calculateVacationPay(100000.0, 21));
     }
 
     @Test
     public void calculateVacationPayGivenNonWorkingDaysTest() {
-
         double avgSalary = 100000.0;
 
         assertEquals(27303.754266211603, vacationPayService.calculateVacationPayGivenNonWorkingDays(
@@ -40,7 +38,6 @@ public class VacationPayServiceTest {
 
     @Test
     public void enterIncorrectSalaryTest() {
-
         assertThrows(IllegalArgumentException.class,
                 () -> vacationPayService.calculateVacationPay(0.0, 21));
 
@@ -50,12 +47,10 @@ public class VacationPayServiceTest {
 
     @Test
     public void enterIncorrectVacationDaysTest() {
-
         assertThrows(IllegalArgumentException.class,
                 () -> vacationPayService.calculateVacationPay(100000.0, 0));
 
         assertThrows(IllegalArgumentException.class,
                 () -> vacationPayService.calculateVacationPay(100000.0, 30));
     }
-
 }

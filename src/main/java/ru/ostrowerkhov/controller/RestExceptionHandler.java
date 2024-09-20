@@ -11,24 +11,21 @@ import java.time.format.DateTimeParseException;
 
 @Slf4j
 @RestControllerAdvice
-public class RestExceptionController {
+public class RestExceptionHandler {
 
     @ExceptionHandler(DateTimeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String parseException(DateTimeParseException e) {
-
         String exceptionInfo = e.getMessage();
-        log.info("Can't parse date: {}", e.getParsedString());
+        log.error("Can't parse date: {}", e.getParsedString());
         return exceptionInfo;
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String incorrectDataException(IllegalArgumentException e) {
-
         String exceptionInfo = e.getMessage();
-        log.info("Incorrect average salary or number of vacation days");
+        log.error("Incorrect average salary or number of vacation days");
         return exceptionInfo;
     }
-
 }

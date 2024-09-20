@@ -13,31 +13,30 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class VacationPayService {
 
+    private final static double AVG_MONTH_DAYS = 29.3;
+    private final static String PATH = "src/main/resources/nonWorkingDays.txt";
+    private final NonWorkingDaysInitializer nonWorkingDaysInitializer;
     private final DatesDeserializer datesDeserializer = new DatesDeserializer();
 
-    public Double calculateVacationPay(Double avgSalary, Integer vacationDays) {
 
+    public Double calculateVacationPay(Double avgSalary, Integer vacationDays) {
         validate(avgSalary, vacationDays);
-        double avgMonthDays = 29.3;
-        return (avgSalary / avgMonthDays) * vacationDays;
+        return (avgSalary / AVG_MONTH_DAYS) * vacationDays;
     }
 
     public Double calculateVacationPayGivenNonWorkingDays(Double avgSalary,
                                                           String startOfVacation,
                                                           String endOfVacation) {
-
         return calculateVacationPay(avgSalary,
                 getVacationWithoutNonWorkingDays(startOfVacation, endOfVacation));
 
     }
 
-    private Integer getVacationWithoutNonWorkingDays(String startOfVacation,
-                                                     String endOfVacation) {
-
+    private Integer getVacationWithoutNonWorkingDays(String startOfVacation, String endOfVacation) {
         LocalDate startDate = datesDeserializer.fromStringToDate(startOfVacation);
         LocalDate endDate = datesDeserializer.fromStringToDate(endOfVacation);
 
-        Set<LocalDate> nonWorkingDays = NonWorkingDaysInitializer.initNonWorkingDays();
+        Set<LocalDate> nonWorkingDays = nonWorkingDaysInitializer.initNonWorkingDays(PATH);
         Set<LocalDate> vacationDates = new HashSet<>();
         LocalDate currentDate = startDate;
 
@@ -51,15 +50,14 @@ public class VacationPayService {
     }
 
     private void validate(Double avgSalary, Integer vacationDays) {
-
         if (avgSalary <= 0) {
             throw new IllegalArgumentException("Average salary must be greater than 0");
         }
         if (vacationDays <= 0) {
             throw new IllegalArgumentException("Vacation days must be greater than 0");
-        } else if (vacationDays > 28) {
+        }
+        if (vacationDays > 28) {
             throw new IllegalArgumentException("Vacation days must be less than 28");
         }
     }
-
 }

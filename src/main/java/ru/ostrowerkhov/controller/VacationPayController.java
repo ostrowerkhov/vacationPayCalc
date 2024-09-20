@@ -29,9 +29,6 @@ public class VacationPayController {
                                  @Parameter(description = "Количество дней отпуска")
                                  @RequestParam("vacationDays") Integer vacationDays) {
 
-        log.info("Result of vacation pay calculation: {}",
-                vacationPayService.calculateVacationPay(avgSalary, vacationDays));
-
         return vacationPayService.calculateVacationPay(avgSalary, vacationDays);
     }
 
@@ -47,16 +44,9 @@ public class VacationPayController {
             @Parameter(description = "Дата окончания отпуска в формате DD.MM.YYYY")
             @RequestParam("endOfVacation") String endOfVacation) {
 
-        log.info("Result of vacation pay calculation given non working days: {}",
-                vacationPayService.calculateVacationPayGivenNonWorkingDays(
-                        avgSalary,
-                        startOfVacation,
-                        endOfVacation));
-
         return vacationPayService.calculateVacationPayGivenNonWorkingDays(
                 avgSalary,
                 startOfVacation,
                 endOfVacation);
     }
-
 }

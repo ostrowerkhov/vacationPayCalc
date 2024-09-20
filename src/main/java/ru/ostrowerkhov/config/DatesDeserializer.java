@@ -16,8 +16,7 @@ public class DatesDeserializer {
     public static final DateTimeFormatter f = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     public LocalDate fromStringToDate(String date) throws DateTimeParseException {
-        date = date.replace("\"", "");
+        date = date.replace("\"", "").replaceAll("[-/]", ".");
         return LocalDate.parse(date, f);
     }
-
 }
